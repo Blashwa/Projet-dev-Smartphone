@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_vue_1"
+        android:icon="@drawable/pencil"
+        android:title="@string/navigation_vue1" />
+
+    <item
+        android:id="@+id/navigation_vue_3"
+        android:icon="@drawable/waypoint"
+        android:title="@string/navigation_vue3" />
+
+    <item
+        android:id="@+id/navigation_vue_2"
+        android:icon="@drawable/remote_controller"
+        android:title="@string/navigation_vue2" />
+
+</menu>
