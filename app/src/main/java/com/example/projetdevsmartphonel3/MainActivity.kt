@@ -1,5 +1,6 @@
 package com.example.projetdevsmartphonel3
 
+import android.graphics.Color
 import android.os.Bundle
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,10 +14,13 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.Polyline
+import com.google.android.gms.maps.model.PolylineOptions
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    private var points = ArrayList<Waypoint>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,9 +62,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // On cree un waypoint pour La Rochelle
         val wpLaRochelle = Waypoint(46.147994, -1.169709, "Port de La Rochelle")
+        val wpLarochelle2 = Waypoint(46.154238, -1.165271, "Objectif")
+        val wpLarochelle3 = Waypoint(46.154226, -1.165253, "Objectif")
 
+        points.add(wpLaRochelle)
+        points.add(wpLarochelle2)
+        points.add(wpLarochelle3)
+
+        drawline()
         // On cree un marker a partir du waypoint de La Rochelle
-        val markerLaRochelle = wpLaRochelle.addMarkerToMap(mMap)
+       // val markerLaRochelle = wpLaRochelle.addMarkerToMap(mMap)
+       // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
 
         // On retire le marker de La Rochelle de la carte
         //markerLaRochelle.remove()
@@ -68,10 +80,24 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // La carte zoom par defaut sur le waypoint de La Rochelle
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(wpLaRochelle.coordX, wpLaRochelle.coordY), 15.0f))
 
-
-
         //val laRochelle = LatLng(46.147994, -1.169709)
         //mMap.addMarker(MarkerOptions().position(laRochelle).title("Port de La Rochelle"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(laRochelle, 15.0f))
+    }
+
+    fun drawline()
+    {
+        val path : MutableList<List<LatLng>> = ArrayList()
+        var coords : ArrayList<LatLng> = ArrayList()
+
+        for (i in 0 until points.size)
+        {
+            coords.add(LatLng(points[i].coordX, points[i].coordY))
+        }
+
+        path.add(coords)
+        for (i in 0 until path.size) {
+            mMap.addPolyline(PolylineOptions().clickable((false)).addAll(path[i]).color((Color.RED)))
+        }
     }
 }
