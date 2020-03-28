@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         val la_rochelle = LatLng(46.147046, -1.169339)
         mMap.addMarker(MarkerOptions().position(la_rochelle).title("Port de La Rochelle"))
 
-        // La carte zoom par defaut sur le waypoint de La Rochelle
+        // La carte zoom par defaut sur le marker de La Rochelle
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(la_rochelle, 15.0f))
     }
 }
