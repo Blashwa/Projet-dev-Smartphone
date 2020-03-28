@@ -50,11 +50,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+        // On initialise la carte
         mMap = googleMap
 
-        // Add a marker in La Rochelle and move the camera
+        // On change le type de la carte pour une vue satellite
+        mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+
+        // On cree un marker pour La Rochelle sur la carte
         val la_rochelle = LatLng(46.147046, -1.169339)
         mMap.addMarker(MarkerOptions().position(la_rochelle).title("Port de La Rochelle"))
+
+        // La carte zoom par defaut sur le waypoint de La Rochelle
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(la_rochelle, 15.0f))
     }
 }
