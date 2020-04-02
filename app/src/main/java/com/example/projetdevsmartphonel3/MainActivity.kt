@@ -70,12 +70,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // On cree un waypoint pour La Rochelle
         val wpLaRochelle = Waypoint(46.147994, -1.169709, "Port de La Rochelle")
-        val wpLarochelle2 = Waypoint(46.154238, -1.165271, "Objectif")
-        val wpLarochelle3 = Waypoint(46.15497, -1.170489, "Objectif")
-
-        points.add(wpLaRochelle)
-        points.add(wpLarochelle3)
-        points.add(wpLarochelle2)
 
 
         //drawline()
@@ -98,7 +92,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     {
     //fonction qui va tracer des polylines
         mMap.clear()
-        Log.d("Daronne", "elle trace des lignes fdp")
 
         val path : MutableList<List<LatLng>> = ArrayList()
         var coords : ArrayList<LatLng> = ArrayList()
