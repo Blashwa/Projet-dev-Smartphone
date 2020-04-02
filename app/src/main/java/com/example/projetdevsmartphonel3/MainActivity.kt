@@ -2,12 +2,15 @@ package com.example.projetdevsmartphonel3
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.projetdevsmartphonel3.ui.home.HomeFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,14 +24,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private var points = ArrayList<Waypoint>()
+    lateinit var dataFragment : HomeFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_one)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //val dataFragment :  Fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as Fragment
+
+        dataFragment = HomeFragment()
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
@@ -63,13 +71,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // On cree un waypoint pour La Rochelle
         val wpLaRochelle = Waypoint(46.147994, -1.169709, "Port de La Rochelle")
         val wpLarochelle2 = Waypoint(46.154238, -1.165271, "Objectif")
-        val wpLarochelle3 = Waypoint(46.154226, -1.165253, "Objectif")
+        val wpLarochelle3 = Waypoint(46.15497, -1.170489, "Objectif")
 
         points.add(wpLaRochelle)
-        points.add(wpLarochelle2)
         points.add(wpLarochelle3)
+        points.add(wpLarochelle2)
 
-        drawline()
+
+        //drawline()
         // On cree un marker a partir du waypoint de La Rochelle
        // val markerLaRochelle = wpLaRochelle.addMarkerToMap(mMap)
        // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
@@ -87,8 +96,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun drawline()
     {
+    //fonction qui va tracer des polylines
+        mMap.clear()
+        Log.d("Daronne", "elle trace des lignes fdp")
+
         val path : MutableList<List<LatLng>> = ArrayList()
         var coords : ArrayList<LatLng> = ArrayList()
+
+        //coords = dataFragment.getcoords()
+//        print(coords[0])
 
         for (i in 0 until points.size)
         {
@@ -99,5 +115,19 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         for (i in 0 until path.size) {
             mMap.addPolyline(PolylineOptions().clickable((false)).addAll(path[i]).color((Color.RED)))
         }
+
     }
+
+    //fonction qui va générer des waypoints
+    fun setcoords(value : ArrayList<LatLng>)
+    {
+        points.clear()
+        for (i in 0 until value.size)
+        {
+            points.add(Waypoint(value[i].latitude, value[i].longitude, ""))
+        }
+
+        drawline()
+    }
+
 }

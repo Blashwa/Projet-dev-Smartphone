@@ -4,4 +4,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_maps">Map</string>
+    <string name="launchbutton">Connexion</string>
+
+    <!-- Textes de la navigation -->
+    <string name="navigation_vue1">Simulation</string>
+    <string name="navigation_vue2">Viewpoint</string>
+    <string name="navigation_vue3">Contrôle</string>
+
 </resources>
