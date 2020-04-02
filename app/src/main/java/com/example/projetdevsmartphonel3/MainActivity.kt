@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     {
     //fonction qui va tracer des polylines
         mMap.clear()
-        Log.d("Daronne", "elle trace des lignes fdp")
 
         val path : MutableList<List<LatLng>> = ArrayList()
         var coords : ArrayList<LatLng> = ArrayList()

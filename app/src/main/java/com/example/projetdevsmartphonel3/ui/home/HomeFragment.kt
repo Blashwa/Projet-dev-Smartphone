@@ -1,6 +1,9 @@
 package com.example.projetdevsmartphonel3.ui.home
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +26,23 @@ import com.google.android.gms.maps.model.LatLng
 class HomeFragment : Fragment() {
 
     private lateinit var homeViewModel: HomeViewModel
+    val DATA_RECEIVED = 1
+    var reponse :ArrayList<LatLng> = ArrayList<LatLng>()
+
+    private val handler: Handler = object : Handler(Looper.getMainLooper()){
+        override fun handleMessage(inputMessage: Message) {
+            val trame = inputMessage.obj as Trame
+            when(inputMessage.what){
+                DATA_RECEIVED -> {
+                    val activity : MainActivity = getActivity() as MainActivity
+                    while(reponse.isEmpty()){
+
+                    }
+                    activity.setcoords(reponse)
+                }
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,10 +57,8 @@ class HomeFragment : Fragment() {
         btn.setOnClickListener(){
             btn.visibility=View.INVISIBLE
             val trame = Trame()
-            trame.execute()
-            var reponse :ArrayList<LatLng> by Delegates.observable(ArrayList()){
-                    _, _, newValue -> dataReceived(newValue)
-            }
+            trame.execute(this)
+
 
             GlobalScope.launch {
                 reponse = trame.get()
@@ -51,8 +69,20 @@ class HomeFragment : Fragment() {
 
     fun dataReceived(value : ArrayList<LatLng>) {
         //Peut être utilisée pour tracer dès les données reçues et traitées
+        /*
         val activity : MainActivity = getActivity() as MainActivity
         activity.setcoords(value)
+         */
+    }
+
+    fun handleState(trame : Trame, state : Int){
+        when(state){
+            DATA_RECEIVED->{
+                handler.obtainMessage(state,trame)?.apply{
+                    sendToTarget()
+                }
+            }
+        }
     }
 
 

@@ -4,14 +4,17 @@ import android.os.AsyncTask
 import android.widget.TextView
 import java.net.Socket
 import android.util.Log
+import com.example.projetdevsmartphonel3.ui.home.HomeFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import com.google.android.gms.maps.model.LatLng
 
-class Trame : AsyncTask<String, String, ArrayList<LatLng>>() {
+class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
     lateinit var server: Socket
     lateinit var finalText : String
     val port = 55555
+    lateinit var homeFragment : HomeFragment
+    val decodedResponse : ArrayList<LatLng> = ArrayList<LatLng>()
 
     fun connexion(adresseServeur: String) {
         server = Socket(adresseServeur,port)
@@ -36,12 +39,7 @@ class Trame : AsyncTask<String, String, ArrayList<LatLng>>() {
         return responseString
     }
 
-    override fun doInBackground(vararg params: String?): ArrayList<LatLng>? {
-        connexion("192.168.1.73")
-        finalText = getServerResponse()
-        val decodeText = decode(finalText)
-        return decodeText
-    }
+
 
     fun decode(reponse : String) : ArrayList<LatLng>{
         val listePoints : ArrayList<LatLng> = ArrayList()   //Liste des coordonnées renvoyées
@@ -83,6 +81,14 @@ class Trame : AsyncTask<String, String, ArrayList<LatLng>>() {
         return listePoints
     }
 
+    override fun doInBackground(vararg params: HomeFragment?): ArrayList<LatLng>? {
+        this.homeFragment = params[0]!!
+        connexion("192.168.1.73")
+        finalText = getServerResponse()
+        val decodedReponse = decode(finalText)
+        homeFragment.handleState(this,homeFragment.DATA_RECEIVED)
+        return decodedReponse
+    }
 
 
 
