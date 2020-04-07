@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (event != null) {
-            Log.v("WESH", "X = " + event.values[0] + "\tY = " + event.values[1] + "\tZ = " + event.values[2])
+            Log.v("INFOS", "X = " + event.values[0] + "\tY = " + event.values[1] + "\tZ = " + event.values[2])
         }
     }
 }
