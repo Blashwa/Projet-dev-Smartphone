@@ -11,4 +11,8 @@
     <string name="navigation_vue2">Viewpoint</string>
     <string name="navigation_vue3">Contrôle</string>
 
+    <!--Textes connexion -->
+    <string name="connectionProgress">Connexion en cours</string>
+    <string name="connectionDone">Connexion terminée</string>
+
 </resources>

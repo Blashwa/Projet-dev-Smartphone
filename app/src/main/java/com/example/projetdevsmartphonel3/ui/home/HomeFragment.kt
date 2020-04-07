@@ -36,9 +36,9 @@ class HomeFragment : Fragment() {
                 DATA_RECEIVED -> {
                     val activity : MainActivity = getActivity() as MainActivity
                     while(reponse.isEmpty()){
-
                     }
                     activity.setcoords(reponse)
+                    texteConnexion.text= getString(R.string.connectionDone)
                 }
             }
         }
@@ -57,8 +57,8 @@ class HomeFragment : Fragment() {
         btn.setOnClickListener(){
             btn.visibility=View.INVISIBLE
             val trame = Trame()
+            root.texteConnexion.text=getString(R.string.connectionProgress)
             trame.execute(this)
-
 
             GlobalScope.launch {
                 reponse = trame.get()
@@ -67,13 +67,6 @@ class HomeFragment : Fragment() {
         return root
     }
 
-    fun dataReceived(value : ArrayList<LatLng>) {
-        //Peut être utilisée pour tracer dès les données reçues et traitées
-        /*
-        val activity : MainActivity = getActivity() as MainActivity
-        activity.setcoords(value)
-         */
-    }
 
     fun handleState(trame : Trame, state : Int){
         when(state){

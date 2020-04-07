@@ -14,7 +14,6 @@ class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
     lateinit var finalText : String
     val port = 55555
     lateinit var homeFragment : HomeFragment
-    val decodedResponse : ArrayList<LatLng> = ArrayList<LatLng>()
 
     fun connexion(adresseServeur: String) {
         server = Socket(adresseServeur,port)
@@ -39,8 +38,6 @@ class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
         return responseString
     }
 
-
-
     fun decode(reponse : String) : ArrayList<LatLng>{
         val listePoints : ArrayList<LatLng> = ArrayList()   //Liste des coordonnées renvoyées
 
@@ -48,12 +45,10 @@ class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
         val reponseLignes =reponse.split("\n")
         for( ligne in reponseLignes) {
             if(ligne !="") {
-
                 //On sépare la ligne pour chaque item
                 val reponseSplit: List<String> = ligne.split(",")
 
                 //Gestion latitude
-
                 val tempLat = (( reponseSplit[3][0].toString() + reponseSplit[3][1].toString() + "."+reponseSplit[3][2].toString() + reponseSplit[3][3].toString()+reponseSplit[3][5].toString() + reponseSplit[3][6].toString()).toDouble())*100
                 val DDt = tempLat.toInt()/100
                 val SSt = tempLat - DDt *100

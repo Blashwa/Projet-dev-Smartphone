@@ -13,4 +13,14 @@
         android:gravity="center"
         tools:ignore="MissingConstraints" />
 
+    <TextView
+        android:id="@+id/texteConnexion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="16dp"
+        android:textSize="16dp"
+        android:textColor="@color/white"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
