@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private var points = ArrayList<Waypoint>()
     lateinit var dataFragment : Fragment
+    lateinit var mapClick : GoogleMap.OnMapClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         */
         navView.setOnNavigationItemSelectedListener(this)
         openFragment(ActivityOneFragment())
+
     }
 
     /**
@@ -60,16 +62,38 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     override fun onMapReady(googleMap: GoogleMap) {
         // On initialise la carte
         mMap = googleMap
 
+        mMap.uiSettings.isMapToolbarEnabled = false
         // On change le type de la carte pour une vue satellite
         mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
 
         // On cree un waypoint pour La Rochelle
         val wpLaRochelle = Waypoint(46.147994, -1.169709, "Port de La Rochelle")
 
+        //click listener pour la map
+        mapClick = GoogleMap.OnMapClickListener {
+
+            if (points.size == 0) {
+                points.add(Waypoint(it.latitude, it.longitude, "Début"))
+            }
+            else
+                points.add(Waypoint(it.latitude, it.longitude, "Fin"))
+            mMap.clear()
+
+            drawline()
+
+            points[0].addMarkerToMap(mMap)
+
+            if (points.size >= 2 )
+            {
+                points[points.size-1].addMarkerToMap(mMap)
+            }
+        }
+        //mMap.setOnMapClickListener(mapClick)
 
         //drawline()
         // On cree un marker a partir du waypoint de La Rochelle
@@ -85,6 +109,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         //val laRochelle = LatLng(46.147994, -1.169709)
         //mMap.addMarker(MarkerOptions().position(laRochelle).title("Port de La Rochelle"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(laRochelle, 15.0f))
+    }
+
+    fun clearMap()
+    {
+        points.clear()
+        mMap.clear()
     }
 
     fun drawline()
@@ -127,16 +157,22 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             R.id.navigation_first->{
                 val fragment = ActivityOneFragment()
                 openFragment(fragment)
+                setTitle(R.string.simulation)
+                mMap.setOnMapClickListener(null)
                 return true
             }
             R.id.navigation_second->{
                 val fragment = ActivityTwoFragment()
                 openFragment(fragment)
+                setTitle(R.string.viewpoint)
+                mMap.setOnMapClickListener(mapClick)
                 return true
             }
             R.id.navigation_third->{
                 val fragment = ActivityThreeFragment()
                 openFragment(fragment)
+                setTitle(R.string.controle)
+                mMap.setOnMapClickListener(null)
                 return true
             }
         }
