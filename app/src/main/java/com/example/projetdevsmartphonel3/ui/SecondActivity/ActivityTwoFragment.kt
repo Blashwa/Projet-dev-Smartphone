@@ -1,4 +1,4 @@
-package com.example.projetdevsmartphonel3.ui.dashboard
+package com.example.projetdevsmartphonel3.ui.SecondActivity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.projetdevsmartphonel3.R
 
-class DashboardFragment : Fragment() {
+class ActivityTwoFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var dashboardViewModel: SecondViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -20,8 +20,8 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         dashboardViewModel =
-            ViewModelProviders.of(this).get(DashboardViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_dashboard, container, false)
+            ViewModelProviders.of(this).get(SecondViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_second, container, false)
         val textView: TextView = root.findViewById(R.id.text_dashboard)
         dashboardViewModel.text.observe(this, Observer {
             textView.text = it

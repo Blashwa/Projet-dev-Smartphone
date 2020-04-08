@@ -9,18 +9,20 @@
         android:id="@+id/launchbtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/launchbutton"
         android:gravity="center"
+        android:text="@string/launchbutton"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/texteConnexion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="-16dp"
-        tools:layout_editor_absoluteY="16dp"
-        android:textSize="16dp"
+        android:layout_width="306dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
         android:textColor="@color/white"
-        />
+        android:textSize="30sp"
+        app:layout_constraintStart_toEndOf="@+id/launchbtn"
+        tools:layout_editor_absoluteY="5dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

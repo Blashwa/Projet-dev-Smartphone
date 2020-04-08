@@ -2,44 +2,40 @@ package com.example.projetdevsmartphonel3
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
+import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.example.projetdevsmartphonel3.ui.home.HomeFragment
+import com.example.projetdevsmartphonel3.ui.SecondActivity.ActivityTwoFragment
+import com.example.projetdevsmartphonel3.ui.FirstActivity.ActivityOneFragment
+import com.example.projetdevsmartphonel3.ui.ThirdActivity.ActivityThreeFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
 
-class MainActivity : AppCompatActivity(), OnMapReadyCallback {
+class MainActivity : AppCompatActivity(), OnMapReadyCallback,
+    BottomNavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var mMap: GoogleMap
     private var points = ArrayList<Waypoint>()
-    lateinit var dataFragment : HomeFragment
+    lateinit var dataFragment : Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_one)
+        setContentView(R.layout.activity_main)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
         //val dataFragment :  Fragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as Fragment
-
-        dataFragment = HomeFragment()
+        //dataFragment = HomeFragment()
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
-
+/*
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -50,6 +46,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        */
+        navView.setOnNavigationItemSelectedListener(this)
+        openFragment(ActivityOneFragment())
     }
 
     /**
@@ -121,6 +120,32 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         drawline()
+    }
+
+    override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        when(p0.itemId){
+            R.id.navigation_first->{
+                val fragment = ActivityOneFragment()
+                openFragment(fragment)
+                return true
+            }
+            R.id.navigation_second->{
+                val fragment = ActivityTwoFragment()
+                openFragment(fragment)
+                return true
+            }
+            R.id.navigation_third->{
+                val fragment = ActivityThreeFragment()
+                openFragment(fragment)
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun openFragment(fragment : Fragment):Boolean{
+        supportFragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment).commit()
+        return true
     }
 
 }

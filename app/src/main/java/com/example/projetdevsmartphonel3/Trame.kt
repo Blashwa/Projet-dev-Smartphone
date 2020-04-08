@@ -1,19 +1,17 @@
 package com.example.projetdevsmartphonel3
 
 import android.os.AsyncTask
-import android.widget.TextView
+import androidx.fragment.app.Fragment
 import java.net.Socket
-import android.util.Log
-import com.example.projetdevsmartphonel3.ui.home.HomeFragment
+import com.example.projetdevsmartphonel3.ui.FirstActivity.ActivityOneFragment
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import com.google.android.gms.maps.model.LatLng
 
-class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
+class Trame : AsyncTask<Fragment, String, ArrayList<LatLng>>() {
     lateinit var server: Socket
-    lateinit var finalText : String
+    lateinit var filteredResponse : String
     val port = 55555
-    lateinit var homeFragment : HomeFragment
 
     fun connexion(adresseServeur: String) {
         server = Socket(adresseServeur,port)
@@ -21,29 +19,29 @@ class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
 
     fun getServerResponse():String{
         val br = BufferedReader(InputStreamReader(server.getInputStream()))
-        val responseTotal = mutableListOf<String>()
+        val responseServerTotal = mutableListOf<String>()
         while(!server.isClosed){
             val texte = br.readLine()
             if(texte!=null) {
-                responseTotal.add(texte)
+                responseServerTotal.add(texte)
             }
             else
                 server.close()
         }
-        var responseString=""
-        for (line in responseTotal) {
+        var responseFiltered=""
+        for (line in responseServerTotal) {
             if(line.startsWith("\$GPRMC"))
-                responseString += line + "\n"
+                responseFiltered += line + "\n"
         }
-        return responseString
+        return responseFiltered
     }
 
     fun decode(reponse : String) : ArrayList<LatLng>{
         val listePoints : ArrayList<LatLng> = ArrayList()   //Liste des coordonnées renvoyées
 
         //On regarde chaque ligne reçue
-        val reponseLignes =reponse.split("\n")
-        for( ligne in reponseLignes) {
+        val reponseSplitLignes =reponse.split("\n")
+        for( ligne in reponseSplitLignes) {
             if(ligne !="") {
                 //On sépare la ligne pour chaque item
                 val reponseSplit: List<String> = ligne.split(",")
@@ -70,19 +68,21 @@ class Trame : AsyncTask<HomeFragment, String, ArrayList<LatLng>>() {
                     listePoints.add(LatLng(-tempLatDecimal,tempLonDecimal))
                 if(reponseSplit[4] == "N" && reponseSplit[6] == "E")
                     listePoints.add(LatLng(tempLatDecimal,tempLonDecimal))
-
             }
         }
         return listePoints
     }
 
-    override fun doInBackground(vararg params: HomeFragment?): ArrayList<LatLng>? {
-        this.homeFragment = params[0]!!
-        connexion("192.168.1.73")
-        finalText = getServerResponse()
-        val decodedReponse = decode(finalText)
-        homeFragment.handleState(this,homeFragment.DATA_RECEIVED)
-        return decodedReponse
+    override fun doInBackground(vararg params: Fragment?): ArrayList<LatLng>? {
+        if(params[0]!! is ActivityOneFragment) {
+            val fragment = params[0]!! as ActivityOneFragment
+            connexion("192.168.1.73")
+            filteredResponse = getServerResponse()
+            val decodedReponse = decode(filteredResponse)
+            fragment.handleState(this, fragment.DATA_RECEIVED)
+            return decodedReponse
+        }
+        return null
     }
 
 

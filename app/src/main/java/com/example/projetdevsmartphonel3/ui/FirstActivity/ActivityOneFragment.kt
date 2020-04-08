@@ -1,31 +1,25 @@
-package com.example.projetdevsmartphonel3.ui.home
+package com.example.projetdevsmartphonel3.ui.FirstActivity
 
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.projetdevsmartphonel3.MainActivity
 import com.example.projetdevsmartphonel3.R
 import com.example.projetdevsmartphonel3.Trame
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import kotlinx.android.synthetic.main.fragment_first.*
+import kotlinx.android.synthetic.main.fragment_first.view.*
 import kotlinx.coroutines.*
-import kotlin.properties.Delegates
 import com.google.android.gms.maps.model.LatLng
 
-class HomeFragment : Fragment() {
+class ActivityOneFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var firstViewModel: FirstViewModel
     val DATA_RECEIVED = 1
     var reponse :ArrayList<LatLng> = ArrayList<LatLng>()
 
@@ -39,6 +33,7 @@ class HomeFragment : Fragment() {
                     }
                     activity.setcoords(reponse)
                     texteConnexion.text= getString(R.string.connectionDone)
+                    launchbtn.isClickable=true
                 }
             }
         }
@@ -49,13 +44,13 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        firstViewModel =
+            ViewModelProviders.of(this).get(FirstViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_first, container, false)
 
         val btn = root.launchbtn
         btn.setOnClickListener(){
-            btn.visibility=View.INVISIBLE
+            btn.isClickable=false
             val trame = Trame()
             root.texteConnexion.text=getString(R.string.connectionProgress)
             trame.execute(this)
