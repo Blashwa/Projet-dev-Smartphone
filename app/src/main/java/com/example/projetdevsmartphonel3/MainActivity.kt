@@ -13,8 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -67,6 +66,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         // On initialise la carte
         mMap = googleMap
 
+        //class pour la création du OnDragListener
+        class OnMarkerDrag : GoogleMap.OnMarkerDragListener {
+
+            override fun onMarkerDragEnd(p0: Marker?) {
+                points[points.size-1] = Waypoint(p0!!.position!!.latitude, p0!!.position!!.longitude, "fin")
+                drawline()
+                points[0].addMarkerToMap(mMap)
+                points[points.size-1].addMarkerToMap(mMap).isDraggable=true
+            }
+
+            override fun onMarkerDragStart(p0: Marker?) {
+            }
+
+            override fun onMarkerDrag(p0: Marker?){
+            }
+        }
+
+        val dragListener = OnMarkerDrag()
+
         mMap.uiSettings.isMapToolbarEnabled = false
         // On change le type de la carte pour une vue satellite
         mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
@@ -90,18 +108,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
             if (points.size >= 2 )
             {
-                points[points.size-1].addMarkerToMap(mMap)
+                //var fin:Marker = points[points.size-1].addMarkerToMap(mMap)
+                points[points.size-1].addMarkerToMap(mMap).isDraggable=true
+
             }
         }
-        //mMap.setOnMapClickListener(mapClick)
 
-        //drawline()
-        // On cree un marker a partir du waypoint de La Rochelle
-       // val markerLaRochelle = wpLaRochelle.addMarkerToMap(mMap)
-       // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
+        mMap.setOnMarkerDragListener(dragListener)
 
-        // On retire le marker de La Rochelle de la carte
-        //markerLaRochelle.remove()
 
         // La carte zoom par defaut sur le waypoint de La Rochelle
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(wpLaRochelle.coordX, wpLaRochelle.coordY), 15.0f))
@@ -159,6 +173,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 openFragment(fragment)
                 setTitle(R.string.simulation)
                 mMap.setOnMapClickListener(null)
+                mMap.clear()
                 return true
             }
             R.id.navigation_second->{
@@ -166,6 +181,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 openFragment(fragment)
                 setTitle(R.string.viewpoint)
                 mMap.setOnMapClickListener(mapClick)
+                mMap.clear()
                 return true
             }
             R.id.navigation_third->{
@@ -173,6 +189,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 openFragment(fragment)
                 setTitle(R.string.controle)
                 mMap.setOnMapClickListener(null)
+                mMap.clear()
                 return true
             }
         }
