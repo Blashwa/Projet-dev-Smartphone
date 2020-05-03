@@ -48,17 +48,10 @@ class ActivityThreeFragment : Fragment() {
         }
         var data: String =""
         data+="<gpx><metadata></metadata><trk><name></name><desc></desc><trkseg>"
-/*
+
         val activity : MainActivity = getActivity() as MainActivity
         val listePoints = activity.getPoints()
 
- */
-        val listePoints =ArrayList<Waypoint>()
-        listePoints.add(Waypoint(45.0, -1.5, ""))
-        listePoints.add(Waypoint(44.0, -1.0, ""))
-        listePoints.add(Waypoint(43.0, -0.5, ""))
-        listePoints.add(Waypoint(30.0, 10.0, ""))
-        listePoints.add(Waypoint(41.0, 0.5, ""))
         for (point in listePoints){
             data+="<trkpt lat=\""+point.coordX+"\" lon=\""+point.coordY+"\"/>"
         }
