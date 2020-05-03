@@ -98,17 +98,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         //click listener pour la map
         mapClick = GoogleMap.OnMapClickListener {
 
-            if (points.size == 0) {
-                points.add(Waypoint(it.latitude, it.longitude, "Début"))
-            }
-            else
-                points.add(Waypoint(it.latitude, it.longitude, "Fin"))
-            mMap.clear()
-
-        //drawline()
+        if (points.size == 0) {
+            points.add(Waypoint(it.latitude, it.longitude, "Début"))
+        }
+        else
+            points.add(Waypoint(it.latitude, it.longitude, "Fin"))
+        mMap.clear()
+        drawline()
         // On cree un marker a partir du waypoint de La Rochelle
-        wpLaRochelle.addMarkerToMap(mMap)
-       // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
+        //wpLaRochelle.addMarkerToMap(mMap)
+        // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
 
             points[0].addMarkerToMap(mMap)
 

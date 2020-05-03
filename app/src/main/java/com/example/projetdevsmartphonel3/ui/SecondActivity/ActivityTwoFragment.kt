@@ -37,10 +37,6 @@ class ActivityTwoFragment : Fragment(), SensorEventListener {
             ViewModelProviders.of(this).get(SecondViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_second, container, false)
 
-        val textView: TextView = root.findViewById(R.id.text_dashboard)
-        dashboardViewModel.text.observe(this, Observer {
-            textView.text = it
-        })
 
         // On initialise le SensorManager
         this.sensorManager = context!!.getSystemService(Context.SENSOR_SERVICE) as SensorManager
