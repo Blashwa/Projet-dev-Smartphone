@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 val fragment = ActivityTwoFragment()
                 openFragment(fragment)
                 setTitle(R.string.viewpoint)
-                mMap.setOnMapClickListener(mapClick)
+                mMap.setOnMapClickListener(null)
                 mMap.clear()
                 return true
             }
@@ -188,7 +188,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 val fragment = ActivityThreeFragment()
                 openFragment(fragment)
                 setTitle(R.string.controle)
-                mMap.setOnMapClickListener(null)
+                mMap.setOnMapClickListener(mapClick)
                 mMap.clear()
                 return true
             }

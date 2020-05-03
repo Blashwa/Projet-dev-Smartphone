@@ -25,15 +25,6 @@ class ActivityTwoFragment : Fragment() {
             ViewModelProviders.of(this).get(SecondViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_second, container, false)
 
-
-        val buttonClear : Button = root.findViewById(R.id.clearButton)
-
-        val activity : MainActivity = getActivity() as MainActivity
-
-        buttonClear.setOnClickListener{ activity.clearMap()}
-        dashboardViewModel.text.observe(this, Observer {
-
-        })
         return root
     }
 }
