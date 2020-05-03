@@ -15,4 +15,8 @@
     <string name="connectionProgress">Connexion en cours</string>
     <string name="connectionDone">Connexion terminée</string>
 
+    <string name="simulation">Simulation</string>
+    <string name="controle">Contrôle</string>
+    <string name="viewpoint">Simulation</string>
+
 </resources>

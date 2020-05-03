@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.projetdevsmartphonel3.MainActivity
 import com.example.projetdevsmartphonel3.R
@@ -28,6 +30,7 @@ class ActivityThreeFragment : Fragment() {
         notificationsViewModel =
             ViewModelProviders.of(this).get(ThirdViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_third, container, false)
+
         val buttonGpx = root.btnGPX
         buttonGpx.setOnClickListener(){
             saveGpx()
@@ -37,6 +40,14 @@ class ActivityThreeFragment : Fragment() {
         buttonJson.setOnClickListener(){
             saveJson()
         }
+        val buttonClear : Button = root.findViewById(R.id.clearButton)
+        val activity : MainActivity = getActivity() as MainActivity
+        buttonClear.setOnClickListener{ activity.clearMap()}
+
+
+        notificationsViewModel.text.observe(this, Observer {
+
+        })
         return root
     }
 
@@ -71,18 +82,11 @@ class ActivityThreeFragment : Fragment() {
         data+="{\"type\":\"FeatureCollection\",\"features\":["
         data+="{\"type\":\"Feature\",\"geometry\":{"
         data+="\"type\":\"LineString\",\"coordinates\":["
-/*
+
         val activity : MainActivity = getActivity() as MainActivity
         val listePoints = activity.getPoints()
 
 
- */
-        val listePoints =ArrayList<Waypoint>()
-        listePoints.add(Waypoint(45.0, -1.5, ""))
-        listePoints.add(Waypoint(44.0, -1.0, ""))
-        listePoints.add(Waypoint(43.0, -0.5, ""))
-        listePoints.add(Waypoint(42.0, 0.0, ""))
-        listePoints.add(Waypoint(41.0, 0.5, ""))
 
         for (i in 0 until listePoints.size-1){
             val point=listePoints.get(i)

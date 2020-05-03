@@ -13,8 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     BottomNavigationView.OnNavigationItemSelectedListener {
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var mMap: GoogleMap
     private var points = ArrayList<Waypoint>()
     lateinit var dataFragment : Fragment
+    lateinit var mapClick : GoogleMap.OnMapClickListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         */
         navView.setOnNavigationItemSelectedListener(this)
         openFragment(ActivityOneFragment())
+
     }
 
     /**
@@ -60,24 +61,61 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+
     override fun onMapReady(googleMap: GoogleMap) {
         // On initialise la carte
         mMap = googleMap
 
+        //class pour la création du OnDragListener
+        class OnMarkerDrag : GoogleMap.OnMarkerDragListener {
+
+            override fun onMarkerDragEnd(p0: Marker?) {
+                points[points.size-1] = Waypoint(p0!!.position!!.latitude, p0!!.position!!.longitude, "fin")
+                drawline()
+                points[0].addMarkerToMap(mMap)
+                points[points.size-1].addMarkerToMap(mMap).isDraggable=true
+            }
+
+            override fun onMarkerDragStart(p0: Marker?) {
+            }
+
+            override fun onMarkerDrag(p0: Marker?){
+            }
+        }
+
+        val dragListener = OnMarkerDrag()
+
+        mMap.uiSettings.isMapToolbarEnabled = false
         // On change le type de la carte pour une vue satellite
         mMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
 
         // On cree un waypoint pour La Rochelle
         val wpLaRochelle = Waypoint(46.147994, -1.169709, "Port de La Rochelle")
 
+        //click listener pour la map
+        mapClick = GoogleMap.OnMapClickListener {
 
-        //drawline()
-        // On cree un marker a partir du waypoint de La Rochelle
-       // val markerLaRochelle = wpLaRochelle.addMarkerToMap(mMap)
-       // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
+            if (points.size == 0) {
+                points.add(Waypoint(it.latitude, it.longitude, "Début"))
+            }
+            else
+                points.add(Waypoint(it.latitude, it.longitude, "Fin"))
+            mMap.clear()
 
-        // On retire le marker de La Rochelle de la carte
-        //markerLaRochelle.remove()
+            drawline()
+
+            points[0].addMarkerToMap(mMap)
+
+            if (points.size >= 2 )
+            {
+                //var fin:Marker = points[points.size-1].addMarkerToMap(mMap)
+                points[points.size-1].addMarkerToMap(mMap).isDraggable=true
+
+            }
+        }
+
+        mMap.setOnMarkerDragListener(dragListener)
+
 
         // La carte zoom par defaut sur le waypoint de La Rochelle
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(wpLaRochelle.coordX, wpLaRochelle.coordY), 15.0f))
@@ -85,6 +123,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         //val laRochelle = LatLng(46.147994, -1.169709)
         //mMap.addMarker(MarkerOptions().position(laRochelle).title("Port de La Rochelle"))
         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(laRochelle, 15.0f))
+    }
+
+    fun clearMap()
+    {
+        points.clear()
+        mMap.clear()
     }
 
     fun drawline()
@@ -127,16 +171,25 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
             R.id.navigation_first->{
                 val fragment = ActivityOneFragment()
                 openFragment(fragment)
+                setTitle(R.string.simulation)
+                mMap.setOnMapClickListener(null)
+                mMap.clear()
                 return true
             }
             R.id.navigation_second->{
                 val fragment = ActivityTwoFragment()
                 openFragment(fragment)
+                setTitle(R.string.viewpoint)
+                mMap.setOnMapClickListener(null)
+                mMap.clear()
                 return true
             }
             R.id.navigation_third->{
                 val fragment = ActivityThreeFragment()
                 openFragment(fragment)
+                setTitle(R.string.controle)
+                mMap.setOnMapClickListener(mapClick)
+                mMap.clear()
                 return true
             }
         }
