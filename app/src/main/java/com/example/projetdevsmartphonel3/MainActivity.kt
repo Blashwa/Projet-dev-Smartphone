@@ -148,4 +148,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
         return true
     }
 
+    fun getPoints(): ArrayList<Waypoint> {
+        return points
+    }
+
 }
