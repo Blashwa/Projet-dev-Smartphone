@@ -1,6 +1,7 @@
 package com.example.projetdevsmartphonel3
 
 import android.graphics.Color
+import android.hardware.SensorEventListener
 import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 
+
 class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     BottomNavigationView.OnNavigationItemSelectedListener {
 
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -102,7 +105,10 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
                 points.add(Waypoint(it.latitude, it.longitude, "Fin"))
             mMap.clear()
 
-            drawline()
+        //drawline()
+        // On cree un marker a partir du waypoint de La Rochelle
+        wpLaRochelle.addMarkerToMap(mMap)
+       // val markeurObjectif = wpLarochelle2.addMarkerToMap(mMap)
 
             points[0].addMarkerToMap(mMap)
 
@@ -167,6 +173,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onNavigationItemSelected(p0: MenuItem): Boolean {
+        mMap.clear()
         when(p0.itemId){
             R.id.navigation_first->{
                 val fragment = ActivityOneFragment()
